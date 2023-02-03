@@ -9,6 +9,22 @@
     "build:test": "webpack --config build/webpack.test.config.js",
     "build": "webpack -p --config build/webpack.production.config.js --progress --hide-modules"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js}": [
+      "eslint --config .eslintrc.js"
+    ],
+    "*.{css,less,scss}": [
+      "stylelint --config .stylelintrc.js"
+    ],
+    "*.{ts,tsx,js,json,html,yml,css,less,scss,md}": [
+      "prettier --write"
+    ]
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {},
@@ -26,12 +42,19 @@
     "file-loader": "^6.2.0",
     "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.0",
+    "husky": "^8.0.3",
     "less-loader": "^11.1.0",
+    "lint-staged": "^13.1.0",
     "mini-css-extract-plugin": "^2.7.2",
     "optimize-css-assets-webpack-plugin": "^6.0.1",
     "postcss-loader": "^7.0.2",
     "prettier": "^2.8.3",
     "source-map-loader": "^4.0.1",
+    "stylelint": "^14.16.1",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-standard": "^29.0.0",
+    "stylelint-declaration-block-no-ignored-properties": "^2.6.0",
+    "stylelint-order": "^6.0.1",
     "typescript": "^4.9.5",
     "url-loader": "^4.1.1",
     "webpack": "^5.75.0",

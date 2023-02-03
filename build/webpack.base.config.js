@@ -1,8 +1,8 @@
 /*
- * @Author: wangjiaxin@leedarson.com 
- * @Date: 2020-03-03 15:28:54 
+ * @Author: wangjiaxin@leedarson.com
+ * @Date: 2020-03-03 15:28:54
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2023-02-02 10:27:23
+ * @Last Modified time: 2023-02-03 13:51:10
  */
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -13,7 +13,7 @@ const { resolve } = require('./utils');
 module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
     const config = require('./env.config')[NODE_ENV];
     const IS_DEVELOPMENT = NODE_ENV === 'development';
-    
+
 
     const webpackConfig = {
         entry: {
@@ -45,7 +45,7 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
                 // {
                 //     test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
                 //     use: [{
-                //         loader:'file-loader', 
+                //         loader:'file-loader',
                 //         option:  {
                 //             name: `${config.filePath}fonts/${config.filenameHash ? '[name].[hash:8]' : '[name]'}.[ext]`
                 //     }}],
@@ -152,9 +152,9 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
             ignored: 'node_modules'
         };
         // 热更新
-        webpackConfig.plugins.push(
-            new webpack.HotModuleReplacementPlugin()
-        );
+        // webpackConfig.plugins.push(
+        //     new webpack.HotModuleReplacementPlugin()
+        // );
     } else {
         // 压缩css
         webpackConfig.plugins.push(
