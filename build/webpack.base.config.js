@@ -2,7 +2,7 @@
  * @Author: wangjiaxin@leedarson.com
  * @Date: 2020-03-03 15:28:54
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2023-02-03 13:51:10
+ * @Last Modified time: 2023-02-03 15:47:53
  */
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -33,38 +33,38 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
                     test: /\.html$/,
                     use: ['html-loader']
                 },
-                // {
-                //     test: /\.(png|jpg|gif|svg)$/,
-                //     use: [{
-                //         loader: 'url-loader',
-                //         query: {
-                //             limit: 1,
-                //         }
-                //     }]
-                // },
-                // {
-                //     test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                //     use: [{
-                //         loader:'file-loader',
-                //         option:  {
-                //             name: `${config.filePath}fonts/${config.filenameHash ? '[name].[hash:8]' : '[name]'}.[ext]`
-                //     }}],
-                // },
-                // {
-                //     test: /\.less$/,
-                //     include: resolve('src'),
-                //     use: [
-                //         {
-                //             loader: MiniCssExtractPlugin.loader,
-                //             options: {
-                //                 hmr: IS_DEVELOPMENT,
-                //             },
-                //         },
-                //         'css-loader',
-                //         'postcss-loader',
-                //         'less-loader'
-                //     ]
-                // }
+                {
+                    test: /\.(png|jpg|gif|svg)$/,
+                    use: [{
+                        loader: 'url-loader',
+                        options: {
+                            limit: 1,
+                        }
+                    }]
+                },
+                {
+                    test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+                    use: [{
+                        loader:'file-loader',
+                        options:  {
+                            name: `${config.filePath}fonts/${config.filenameHash ? '[name].[hash:8]' : '[name]'}.[ext]`
+                    }}],
+                },
+                {
+                    test: /\.less$/,
+                    include: resolve('src'),
+                    use: [
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {
+                                hmr: IS_DEVELOPMENT,
+                            },
+                        },
+                        'css-loader',
+                        'postcss-loader',
+                        'less-loader'
+                    ]
+                }
             ]
         },
         plugins: [

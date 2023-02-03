@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --config build/webpack.development.config.js --open --hot",
     "build:test": "webpack --config build/webpack.test.config.js",
-    "build": "webpack -p --config build/webpack.production.config.js --progress --hide-modules"
+    "build": "webpack --config build/webpack.production.config.js"
   },
   "husky": {
     "hooks": {
