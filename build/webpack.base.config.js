@@ -2,13 +2,15 @@
  * @Author: wangjiaxin@leedarson.com
  * @Date: 2020-03-03 15:28:54
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2023-02-03 15:47:53
+ * @Last Modified time: 2023-02-07 13:48:56
  */
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { resolve } = require('./utils');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const WebpackBar = require('webpackbar');
 
 module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
     const config = require('./env.config')[NODE_ENV];
@@ -17,7 +19,7 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
 
     const webpackConfig = {
         entry: {
-            index: resolve('src/index.ts')
+            index: resolve('src/Index.tsx')
         },
         output: {
             path: resolve('./dist'),
@@ -25,10 +27,19 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
             filename: `${config.filePath}js/${config.filenameHash ? '[name].[chunkhash:8]' : '[name]'}.js`,
             chunkFilename: `${config.filePath}js/${config.filenameHash ? '[name].[chunkhash:8]' : '[name]'}.js`
         },
-        externals: {},
+        externals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+        },
         devtool: config.devtool,
         module: {
             rules: [
+                {
+                  test: /\.(tsx?|js)$/,
+                  loader: 'babel-loader',
+                  options: { cacheDirectory: true },
+                  exclude: /node_modules/,
+                },
                 {
                     test: /\.html$/,
                     use: ['html-loader']
@@ -39,7 +50,9 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
                         loader: 'url-loader',
                         options: {
                             limit: 1,
-                        }
+                            name: '[name].[contenthash:8].[ext]',
+                            outputPath: `${config.filePath}/images`,
+                        },
                     }]
                 },
                 {
@@ -47,8 +60,10 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
                     use: [{
                         loader:'file-loader',
                         options:  {
-                            name: `${config.filePath}fonts/${config.filenameHash ? '[name].[hash:8]' : '[name]'}.[ext]`
-                    }}],
+                            name: '[name].[contenthash:8].[ext]',
+                            outputPath: `${config.filePath}/fonts`,
+                        }
+                      }],
                 },
                 {
                     test: /\.less$/,
@@ -87,7 +102,16 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
             new MiniCssExtractPlugin({
                 filename: IS_DEVELOPMENT ? 'style.css' : 'css/[name].[contenthash:8].css',
                 chunkFilename: IS_DEVELOPMENT ? '[id].css' : 'css/[id].[contenthash:8].css',
-            })
+            }),
+            new WebpackBar({
+              name: IS_DEVELOPMENT ? '正在启动' : '正在打包',
+              color: '#fa8c16',
+            }),
+            new ForkTsCheckerWebpackPlugin({
+              typescript: {
+                configFile: resolve('./tsconfig.json'),
+              },
+            }),
         ],
         resolve: {
             alias: {
@@ -98,7 +122,7 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
                 '@less': resolve('src/assets/less'),
                 '@locales': resolve('src/locales'),
             },
-            extensions: ['.ts', '.js', '.json']
+            extensions: ['.ts', '.tsx', '.js', '.json']
         },
     };
 
