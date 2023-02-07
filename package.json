@@ -42,7 +42,7 @@
     "@types/react-dom": "^18.0.10",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "airbnb": "0.0.2",
-    "babel-loader": "^9.1.2",
+    "babel-loader": "^8.0.4",
     "css-loader": "^6.7.3",
     "eslint": "^8.33.0",
     "eslint-config-standard-with-typescript": "^34.0.0",
