@@ -4,11 +4,12 @@ declare global {
   interface Window {
     VConsole: any;
     onError: any;
+    console: any;
   }
 }
 
 interface IConfig {
-  vconsole: string;
+  vconsoleUrl: string;
   reportUrl: string;
   uuid: string;
 }
@@ -19,25 +20,40 @@ interface IMessage {
 }
 
 class Logger {
-  private vconsole: string;
-
+  private vconsoleUrl: string;
+  private vconsole: any;
   private reportUrl: string;
-
   private uuid: string;
+  private store = [];
 
-  constructor() {}
+  constructor() {
+    // 拦截window.console
+    var methodList = ['log', 'info', 'warn', 'debug', 'error'];
+    methodList.forEach(function (item) {
+      var method = window.console[item];
+      window.console[item] = function () {
+        // vconsole未就绪，推入vconsole
+        if (typeof this.vconsole === 'undefined') {
+          this.store.push({
+            logType: item,
+            logs: arguments,
+          });
+        }
+        method.apply(console, arguments);
+      };
+    });
+  }
 
-  setConfig({ vconsole, reportUrl, uuid }: IConfig): void {
-    this.vconsole = vconsole;
+  setConfig({ vconsoleUrl, reportUrl, uuid }: IConfig): void {
+    this.vconsoleUrl = vconsoleUrl;
     this.reportUrl = reportUrl;
     this.uuid = uuid;
-
     this.initVconsole();
-    this.addWinowErrorListener();
+    this.windowErrorListener();
   }
 
   // 错误日志
-  private addWinowErrorListener() {
+  private windowErrorListener() {
     window.onError = (msg: string, url: string, line: string, col: string, error: any) => {
       let stack = error.stack
         .replace(/\n/gi, '')
@@ -49,27 +65,29 @@ class Logger {
       if (stack.indexOf(msg) < 0) {
         stack = errorMsg + '@' + stack;
       }
-
       const message: IMessage = {
         content: { msg: errorMsg, url, line, col, stack },
         level: 'error',
       };
-
       this.report(message);
     };
   }
 
   // 初始化vConsole
-  initVconsole() {
-    loadScript(this.vconsole).then(() => {
+  async initVconsole() {
+    try {
+      await loadScript(this.vconsoleUrl);
       const vConsoleInstance = new window.VConsole({
         defaultPlugins: ['system', 'network', 'element', 'storage'],
         maxLogNumber: 500,
       });
-      try {
-        vConsoleInstance.show();
-      } catch (e) {}
-    });
+
+      this.store.forEach((item) => {
+        vConsoleInstance.pluginList.default.printLog(item);
+      });
+      this.store = [];
+      vConsoleInstance.show();
+    } catch {}
   }
 
   report(message: IMessage) {
