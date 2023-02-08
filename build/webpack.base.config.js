@@ -80,7 +80,8 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
                 'process.env.STATIC_PATH': JSON.stringify(config.staticPath),
-                'process.env.HOST': JSON.stringify(config.HOST)
+                'process.env.HOST': JSON.stringify(config.HOST),
+                'process.env.MOCK': IS_DEVELOPMENT
             }),
             new HtmlWebpackPlugin({
                 filename: `index.html`,

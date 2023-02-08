@@ -1,4 +1,3 @@
-import React from 'react';
 import { add } from './utils';
 interface IProps {
   name: string;
