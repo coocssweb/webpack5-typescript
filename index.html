@@ -19,13 +19,11 @@
       var width = html.getBoundingClientRect().width || 320;
       var fontSize = width / 9.375;
       html.style.fontSize = (fontSize > 40 ? 40 : fontSize) + 'px';
-
-      window.__startAt = Date.now();
     </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root">Hello World</div>
+    <div id="root"></div>
   </body>
 
   <script crossorigin src="https://unpkg.com/react@16.13.1/umd/react.production.min.js"></script>

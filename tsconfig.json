@@ -5,7 +5,7 @@
     "module": "ESNext",                       // 指定生成哪个模块系统代码
     "lib": ["dom", "dom.iterable", "esnext"], // 编译过程中需要引入的库文件的列表
     "allowJs": true,                          // 允许编译 js 文件
-    "jsx": "react",                           // 在 .tsx 文件里支持 JSX
+    "jsx": "react-jsx",                           // 在 .tsx 文件里支持 JSX
     "isolatedModules": true,
     "strict": true,                           // 启用所有严格类型检查选项
 

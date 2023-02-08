@@ -1,16 +1,11 @@
-/*
- * @Author: wangjiaxin@leedarson.com
- * @Date: 2020-03-03 15:28:54
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2023-02-07 13:48:56
- */
+
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { resolve } = require('./utils');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const WebpackBar = require('webpackbar');
+// const WebpackBar = require('webpackbar');
 
 module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
     const config = require('./env.config')[NODE_ENV];
@@ -35,9 +30,8 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
         module: {
             rules: [
                 {
-                  test: /\.(tsx?|js)$/,
+                  test: /\.(tsx?|jsx?)$/,
                   loader: 'babel-loader',
-                  options: { cacheDirectory: true },
                   exclude: /node_modules/,
                 },
                 {
@@ -50,7 +44,7 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
                         loader: 'url-loader',
                         options: {
                             limit: 1,
-                            name: '[name].[contenthash:8].[ext]',
+                            name:  IS_DEVELOPMENT? '[name].[ext]': '[name].[contenthash:8].[ext]',
                             outputPath: `${config.filePath}/images`,
                         },
                     }]
@@ -60,7 +54,7 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
                     use: [{
                         loader:'file-loader',
                         options:  {
-                            name: '[name].[contenthash:8].[ext]',
+                            name: IS_DEVELOPMENT? '[name].[ext]' :'[name].[contenthash:8].[ext]',
                             outputPath: `${config.filePath}/fonts`,
                         }
                       }],
@@ -91,7 +85,7 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
             new HtmlWebpackPlugin({
                 filename: `index.html`,
                 template: resolve('index.html'),
-                chunks: ['manifest', 'vendor', 'app', 'common', 'index'],
+                chunks: IS_DEVELOPMENT ?  [] : ['manifest', 'vendor', 'index'],
                 hash: false,
                 inject: 'body',
                 xhtml: false,
@@ -99,20 +93,16 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
                     removeComments: true,
                 }
             }),
-            new MiniCssExtractPlugin({
-                filename: IS_DEVELOPMENT ? 'style.css' : 'css/[name].[contenthash:8].css',
-                chunkFilename: IS_DEVELOPMENT ? '[id].css' : 'css/[id].[contenthash:8].css',
-            }),
-            new WebpackBar({
-              name: IS_DEVELOPMENT ? '正在启动' : '正在打包',
-              color: '#fa8c16',
-            }),
-            new ForkTsCheckerWebpackPlugin({
-              typescript: {
-                configFile: resolve('./tsconfig.json'),
-              },
-            }),
+
+            // new WebpackBar({
+            //   name: IS_DEVELOPMENT ? '正在启动' : '正在打包',
+            //   color: '#fa8c16',
+            // }),
+
         ],
+        watchOptions: {
+          ignored: /node_modules/,
+        },
         resolve: {
             alias: {
                 '@app': resolve('src/app/index.ts'),
@@ -124,41 +114,6 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
             },
             extensions: ['.ts', '.tsx', '.js', '.json']
         },
-    };
-
-
-
-    // 公共代码
-    webpackConfig.optimization = {
-        splitChunks: {
-            cacheGroups: {
-                app: {
-                    test: /[\\/]src\/app[\\/]/,
-                    chunks: 'all',
-                    name: 'app',
-                    minChunks: 1,
-                    priority: 10
-                },
-                vendor: {
-                    test: /[\\/]node_modules[\\/]/,
-                    chunks: 'all',
-                    name: 'vendor',
-                    minChunks: 1,
-                    priority: 10
-                },
-                common: {
-                    test: /[\\/]src[\\/]/,
-                    chunks: 'all',
-                    name: 'common',
-                    minChunks: 3,
-                    priority: 10
-                }
-            }
-        },
-        moduleIds: 'deterministic',
-        runtimeChunk: {
-            name: 'manifest',
-        }
     };
 
     // 开发环境服务器配置
@@ -180,12 +135,42 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
         //     new webpack.HotModuleReplacementPlugin()
         // );
     } else {
-        // 压缩css
-        webpackConfig.plugins.push(
-            new OptimizeCssAssetsPlugin({
-                cssProcessorOptions: { safe: true }
-            })
-        );
+      // 公共代码
+      webpackConfig.optimization = {
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    chunks: 'all',
+                    name: 'vendor',
+                    minChunks: 1,
+                    priority: 10
+                }
+            }
+        },
+        moduleIds: 'deterministic',
+        runtimeChunk: {
+            name: 'manifest',
+        }
+      };
+      new MiniCssExtractPlugin({
+        filename: IS_DEVELOPMENT ? 'style.css' : 'css/[name].[contenthash:8].css',
+        chunkFilename: IS_DEVELOPMENT ? '[id].css' : 'css/[id].[contenthash:8].css',
+      }),
+      // 压缩css
+      webpackConfig.plugins.push(
+        new OptimizeCssAssetsPlugin({
+          cssProcessorOptions: { safe: true }
+        })
+      );
+
+      webpackConfig.plugins.push(
+        new ForkTsCheckerWebpackPlugin({
+          typescript: {
+            configFile: resolve('./tsconfig.json'),
+          },
+        })
+      );
     }
     return webpackConfig;
 };

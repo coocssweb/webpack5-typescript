@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --config build/webpack.development.config.js --open --hot",
+    "start": "webpack-dev-server --config build/webpack.development.config.js --progress --profile",
     "build:test": "webpack --config build/webpack.test.config.js",
-    "build": "webpack --config build/webpack.production.config.js"
+    "build": "webpack --config build/webpack.production.config.js",
+    "analyzer": "webpack --config build/webpack.analyzer.config.js"
   },
   "husky": {
     "hooks": {
@@ -53,7 +54,6 @@
     "eslint-plugin-unicorn": "^45.0.2",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^7.3.0",
-    "glob": "^8.1.0",
     "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^8.0.3",
