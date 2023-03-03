@@ -8,3 +8,8 @@ export const loadScript = (src: string): Promise<any> => {
     document.head.appendChild(script);
   });
 };
+
+
+export const loadPhotos = (paths: Array<String>) => {
+  
+}

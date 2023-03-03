@@ -14,7 +14,7 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
 
     const webpackConfig = {
         entry: {
-            index: resolve('src/Index.tsx')
+            index: resolve('src/index.tsx')
         },
         output: {
             path: resolve('./dist'),
