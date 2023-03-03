@@ -23,8 +23,8 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
             chunkFilename: `${config.filePath}js/${config.filenameHash ? '[name].[chunkhash:8]' : '[name]'}.js`
         },
         externals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
+          // react: 'React',
+          // 'react-dom': 'ReactDOM',
         },
         devtool: config.devtool,
         module: {
