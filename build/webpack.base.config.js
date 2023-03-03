@@ -86,7 +86,7 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
             new HtmlWebpackPlugin({
                 filename: `index.html`,
                 template: resolve('index.html'),
-                chunks: IS_DEVELOPMENT ?  [] : ['manifest', 'vendor', 'index'],
+                chunks: IS_DEVELOPMENT ? null : ['manifest', 'vendor', 'index'],
                 hash: false,
                 inject: 'body',
                 xhtml: false,
@@ -110,6 +110,7 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
                 '@layout': resolve('src/layout/index.js'),
                 '@modules': resolve('src/app/modules'),
                 '@utils': resolve('src/utils'),
+                '@logger': resolve('src/logger'),
                 '@less': resolve('src/assets/less'),
                 '@locales': resolve('src/locales'),
             },

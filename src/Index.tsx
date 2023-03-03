@@ -1,8 +1,9 @@
-import ReactDom from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './app';
 
 if (process.env.MOCK) {
   require('./apis/mocks');
 }
 
-ReactDom.render(<App age={19} name="wjx" />, document.querySelector('#root'));
+const root = createRoot(document.getElementById('root') as HTMLElement);
+root.render(<App age={19} name="wdjx" />);

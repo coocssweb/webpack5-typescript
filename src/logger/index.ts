@@ -40,11 +40,14 @@ class Logger {
       var method = window.console[item];
       window.console[item] = function () {
         // vconsole未就绪，推入vconsole
-        if (typeof this.vconsole === 'undefined' && this.store.length <= 500) {
-          this.store.push({
-            logType: item,
-            logs: arguments,
-          });
+        // webpack 更更时候 this undefined
+        if (typeof this !== 'undefined') {
+          if (typeof this.vconsole === 'undefined' && this.store.length <= 500) {
+            this.store.push({
+              logType: item,
+              logs: arguments,
+            });
+          }
         }
         method.apply(console, arguments);
       };
