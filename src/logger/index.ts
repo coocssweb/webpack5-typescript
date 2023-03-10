@@ -42,7 +42,7 @@ class Logger {
         // vconsole未就绪，推入vconsole
         // webpack 更更时候 this undefined
         if (typeof this !== 'undefined') {
-          if (typeof this.vconsole === 'undefined' && this.store.length <= 500) {
+          if (typeof this.vconsole === 'undefined' && typeof this.store !== 'undefined' && this.store.length <= 500) {
             this.store.push({
               logType: item,
               logs: arguments,

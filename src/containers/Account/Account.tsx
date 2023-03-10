@@ -1,5 +1,7 @@
+import React from 'react';
+
 const Account = () => {
-  return <>Didddd-ddv</>;
+  return <div>Accountssd</div>;
 };
 
 export default Account;
