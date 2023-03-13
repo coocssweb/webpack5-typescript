@@ -21,8 +21,8 @@ const getFn = <T>(url: string, params: IAnyObj = {}): Promise<[any, IHttpRespons
         const response = result.data as IHttpResponse<T>;
         resolve([null, response as IHttpResponse<T>]);
       })
-      .catch((err) => {
-        resolve([err, undefined]);
+      .catch((error) => {
+        resolve([error, undefined]);
       });
   });
 
