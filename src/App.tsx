@@ -1,5 +1,6 @@
 import '@logger';
 import Account from './containers/Account/Account';
+import Main from './containers/Main/Main';
 
 interface IProps {
   name: string;
@@ -7,12 +8,7 @@ interface IProps {
 }
 
 const App = (user: IProps) => {
-  return (
-    <div>
-      Hello WorldSSS
-      <Account />
-    </div>
-  );
+  return <Main />;
 };
 
 export default App;

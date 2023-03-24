@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import './assets/less/index.less';
 import App from './app';
 
 if (process.env.MOCK) {

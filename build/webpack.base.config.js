@@ -63,12 +63,7 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
                     test: /\.less$/,
                     include: resolve('src'),
                     use: [
-                        {
-                            loader: MiniCssExtractPlugin.loader,
-                            options: {
-                                hmr: IS_DEVELOPMENT,
-                            },
-                        },
+                      MiniCssExtractPlugin.loader,
                         'css-loader',
                         'postcss-loader',
                         'less-loader'
@@ -94,12 +89,10 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
                     removeComments: true,
                 }
             }),
-
-            // new WebpackBar({
-            //   name: IS_DEVELOPMENT ? '正在启动' : '正在打包',
-            //   color: '#fa8c16',
-            // }),
-
+            new MiniCssExtractPlugin({
+              filename: IS_DEVELOPMENT ? 'style.css' : 'css/[name].[contenthash:8].css',
+              chunkFilename: IS_DEVELOPMENT ? '[id].css' : 'css/[id].[contenthash:8].css',
+            })
         ],
         watchOptions: {
           ignored: /node_modules/,
@@ -155,10 +148,7 @@ module.exports = function webpackBaseConfig (NODE_ENV = 'development') {
             name: 'manifest',
         }
       };
-      new MiniCssExtractPlugin({
-        filename: IS_DEVELOPMENT ? 'style.css' : 'css/[name].[contenthash:8].css',
-        chunkFilename: IS_DEVELOPMENT ? '[id].css' : 'css/[id].[contenthash:8].css',
-      }),
+
       // 压缩css
       webpackConfig.plugins.push(
         new OptimizeCssAssetsPlugin({
