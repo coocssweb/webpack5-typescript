@@ -2,10 +2,11 @@
  * @Author: wangjiaxin@leedarson.com
  * @Date: 2023-03-24 14:11:53
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2023-03-24 15:33:06
+ * @Last Modified time: 2023-03-27 15:15:34
  */
 import React from 'react';
 import { Layout, Space } from 'antd';
+import Menus from './Menus';
 const { Header, Footer, Sider, Content } = Layout;
 
 const Main = () => {
@@ -15,7 +16,9 @@ const Main = () => {
         <div className="logo" />
       </Header>
       <Layout>
-        <Sider width={200}></Sider>
+        <Sider width={250}>
+          <Menus />
+        </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
           <Content
             style={{
